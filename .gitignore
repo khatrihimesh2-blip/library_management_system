@@ -1,0 +1,13 @@
+# Build artifacts
+*.o
+library
+practicals/*/app
+
+# Runtime-generated / stale data files
+books.csv
+students.csv
+practicals/*/students.csv
+
+# Editor / OS files
+.DS_Store
+*.swp
