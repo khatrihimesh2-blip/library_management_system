@@ -1,0 +1,10 @@
+# Compiled binaries
+app
+*/app
+*.o
+
+# Generated at runtime
+*/students.csv
+
+# OS files
+.DS_Store
