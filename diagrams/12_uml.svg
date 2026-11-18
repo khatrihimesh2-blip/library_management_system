@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="560" viewBox="0 0 720 560" font-family="Helvetica, Arial, sans-serif">
+  <style>
+    .box{fill:#eef4fb;stroke:#2c5a8c;stroke-width:1.5;}
+    .ebox{fill:#fdecec;stroke:#b5302d;stroke-width:1.5;}
+    .stdbox{fill:#eceff3;stroke:#55606e;stroke-width:1.5;}
+    .title{fill:#1b3a5c;font-size:14px;font-weight:bold;}
+    .etitle{fill:#8a201e;font-size:12px;font-weight:bold;}
+    .stdtitle{fill:#333;font-size:12px;font-weight:bold;}
+    .mem{fill:#333;font-size:11px;}
+    .line{stroke:#2c5a8c;stroke-width:1;}
+    .arrow{stroke:#b5302d;stroke-width:1.4;fill:none;}
+    .lbl{fill:#6b7684;font-size:11px;font-style:italic;}
+  </style>
+  <defs>
+    <marker id="triu" markerWidth="14" markerHeight="14" refX="12" refY="6" orient="auto">
+      <path d="M1,1 L13,6 L1,11 Z" fill="#fff" stroke="#b5302d" stroke-width="1.2"/>
+    </marker>
+    <marker id="diamond" markerWidth="18" markerHeight="12" refX="1" refY="6" orient="auto">
+      <path d="M1,6 L8,1 L16,6 L8,11 Z" fill="#2c5a8c"/>
+    </marker>
+  </defs>
+
+  <!-- Library -->
+  <rect class="box" x="30" y="60" width="250" height="186" rx="3"/>
+  <text class="title" x="155" y="80" text-anchor="middle">Library</text>
+  <line class="line" x1="30" y1="88" x2="280" y2="88"/>
+  <text class="mem" x="38" y="104">- books_ : map&lt;int, Book&gt;</text>
+  <text class="mem" x="38" y="118">- filename_ : string</text>
+  <line class="line" x1="30" y1="126" x2="280" y2="126"/>
+  <text class="mem" x="38" y="142">+ addBook(id, title, author)</text>
+  <text class="mem" x="38" y="156">+ issueBook(id)</text>
+  <text class="mem" x="38" y="170">+ returnBook(id)</text>
+  <text class="mem" x="38" y="184">+ getBook(id) : const Book&amp;</text>
+  <text class="mem" x="38" y="198">+ search(text) : vector&lt;Book&gt;</text>
+  <text class="mem" x="38" y="212">+ loadFromFile()</text>
+  <text class="mem" x="38" y="226">+ saveToFile()</text>
+  <text class="mem" x="38" y="240">+ count() : size_t</text>
+
+  <!-- Book -->
+  <rect class="box" x="430" y="60" width="260" height="196" rx="3"/>
+  <text class="title" x="560" y="80" text-anchor="middle">Book</text>
+  <line class="line" x1="430" y1="88" x2="690" y2="88"/>
+  <text class="mem" x="438" y="104">- id_ : int</text>
+  <text class="mem" x="438" y="118">- title_ : string</text>
+  <text class="mem" x="438" y="132">- author_ : string</text>
+  <text class="mem" x="438" y="146">- available_ : bool</text>
+  <line class="line" x1="430" y1="154" x2="690" y2="154"/>
+  <text class="mem" x="438" y="170">+ getId() / getTitle() / getAuthor()</text>
+  <text class="mem" x="438" y="184">+ isAvailable() : bool</text>
+  <text class="mem" x="438" y="198">+ setAvailable(bool)</text>
+  <text class="mem" x="438" y="212">+ toCsv() : string</text>
+  <text class="mem" x="438" y="226">+ fromCsv(string) : Book  «static»</text>
+  <text class="mem" x="438" y="240">+ display()</text>
+
+  <!-- composition: Library owns Book -->
+  <path d="M280,150 L430,150" stroke="#2c5a8c" stroke-width="1.5" fill="none" marker-start="url(#diamond)"/>
+  <text class="lbl" x="355" y="142" text-anchor="middle">owns 1..*</text>
+  <text class="lbl" x="355" y="166" text-anchor="middle">std::map&lt;int,Book&gt;</text>
+
+  <!-- std exception chain -->
+  <rect class="stdbox" x="250" y="320" width="150" height="30" rx="3"/>
+  <text class="stdtitle" x="325" y="340" text-anchor="middle">std::runtime_error</text>
+
+  <path class="arrow" d="M325,392 L325,350" marker-end="url(#triu)"/>
+  <rect class="ebox" x="245" y="392" width="160" height="30" rx="3"/>
+  <text class="etitle" x="325" y="412" text-anchor="middle">LibraryException</text>
+
+  <!-- six subclasses -->
+  <g>
+    <path class="arrow" d="M70,490 L300,422" marker-end="url(#triu)"/>
+    <path class="arrow" d="M210,490 L310,422" marker-end="url(#triu)"/>
+    <path class="arrow" d="M350,490 L325,422" marker-end="url(#triu)"/>
+    <path class="arrow" d="M470,490 L340,422" marker-end="url(#triu)"/>
+    <path class="arrow" d="M610,490 L350,422" marker-end="url(#triu)"/>
+  </g>
+
+  <rect class="ebox" x="10" y="490" width="120" height="30" rx="3"/>
+  <text class="etitle" x="70" y="510" text-anchor="middle">BookNotFound</text>
+  <rect class="ebox" x="140" y="490" width="130" height="30" rx="3"/>
+  <text class="etitle" x="205" y="510" text-anchor="middle">DuplicateBookId</text>
+  <rect class="ebox" x="280" y="490" width="130" height="30" rx="3"/>
+  <text class="etitle" x="345" y="510" text-anchor="middle">BookUnavailable</text>
+  <rect class="ebox" x="420" y="490" width="120" height="30" rx="3"/>
+  <text class="etitle" x="480" y="510" text-anchor="middle">InvalidInput</text>
+  <rect class="ebox" x="550" y="490" width="130" height="30" rx="3"/>
+  <text class="etitle" x="615" y="510" text-anchor="middle">MalformedRecord</text>
+
+  <text class="lbl" x="325" y="300" text-anchor="middle">Exception hierarchy — caught specifically or as a base class in main()</text>
+  <text class="lbl" x="615" y="540" text-anchor="middle">(+ BookNotIssued)</text>
+</svg>

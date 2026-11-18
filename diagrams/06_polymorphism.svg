@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="320" viewBox="0 0 560 320" font-family="Helvetica, Arial, sans-serif">
+  <style>
+    .box{fill:#eef4fb;stroke:#2c5a8c;stroke-width:1.5;}
+    .abox{fill:#fdf1e3;stroke:#b5721a;stroke-width:1.5;}
+    .title{fill:#1b3a5c;font-size:14px;font-weight:bold;}
+    .atitle{fill:#8a5411;font-size:14px;font-weight:bold;font-style:italic;}
+    .mem{fill:#333;font-size:11px;}
+    .line{stroke:#2c5a8c;stroke-width:1;}
+    .aline{stroke:#b5721a;stroke-width:1;}
+    .arrow{stroke:#2c5a8c;stroke-width:1.5;fill:none;}
+    .lbl{fill:#6b7684;font-size:10px;font-style:italic;}
+  </style>
+  <defs>
+    <marker id="tri2" markerWidth="14" markerHeight="14" refX="12" refY="6" orient="auto">
+      <path d="M1,1 L13,6 L1,11 Z" fill="#fff" stroke="#2c5a8c" stroke-width="1.2"/>
+    </marker>
+  </defs>
+
+  <!-- Shape (abstract) -->
+  <rect class="abox" x="190" y="10" width="180" height="76" rx="3"/>
+  <text class="atitle" x="280" y="30" text-anchor="middle">«abstract» Shape</text>
+  <line class="aline" x1="190" y1="40" x2="370" y2="40"/>
+  <text class="mem" x="198" y="56" font-style="italic">+ area() = 0  : double</text>
+  <text class="mem" x="198" y="70" font-style="italic">+ name() = 0</text>
+  <text class="mem" x="198" y="84">+ ~Shape()  «virtual»</text>
+
+  <!-- three arrows up to Shape -->
+  <path class="arrow" d="M100,200 L250,88" marker-end="url(#tri2)"/>
+  <path class="arrow" d="M280,200 L280,88" marker-end="url(#tri2)"/>
+  <path class="arrow" d="M460,200 L310,88" marker-end="url(#tri2)"/>
+  <text class="lbl" x="285" y="140" text-anchor="middle">override area()</text>
+
+  <!-- Circle -->
+  <rect class="box" x="20" y="200" width="150" height="60" rx="3"/>
+  <text class="title" x="95" y="220" text-anchor="middle">Circle</text>
+  <line class="line" x1="20" y1="228" x2="170" y2="228"/>
+  <text class="mem" x="28" y="244">- r_ : double</text>
+  <text class="mem" x="28" y="256">+ area() = πr²</text>
+
+  <!-- Rectangle -->
+  <rect class="box" x="205" y="200" width="150" height="60" rx="3"/>
+  <text class="title" x="280" y="220" text-anchor="middle">Rectangle</text>
+  <line class="line" x1="205" y1="228" x2="355" y2="228"/>
+  <text class="mem" x="213" y="244">- w_, h_ : double</text>
+  <text class="mem" x="213" y="256">+ area() = w·h</text>
+
+  <!-- Triangle -->
+  <rect class="box" x="390" y="200" width="150" height="60" rx="3"/>
+  <text class="title" x="465" y="220" text-anchor="middle">Triangle</text>
+  <line class="line" x1="390" y1="228" x2="540" y2="228"/>
+  <text class="mem" x="398" y="244">- base_, height_</text>
+  <text class="mem" x="398" y="256">+ area() = ½·b·h</text>
+
+  <text class="lbl" x="280" y="295" text-anchor="middle">Call area() through a Shape* — the correct override runs at runtime (dynamic dispatch).</text>
+</svg>

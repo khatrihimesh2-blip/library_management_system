@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="340" viewBox="0 0 560 340" font-family="Helvetica, Arial, sans-serif">
+  <style>
+    .box{fill:#eef4fb;stroke:#2c5a8c;stroke-width:1.5;}
+    .fbox{fill:#e8f5ec;stroke:#2f8a4e;stroke-width:1.5;}
+    .abox{fill:#fdf1e3;stroke:#b5721a;stroke-width:1.5;}
+    .title{fill:#1b3a5c;font-size:14px;font-weight:bold;}
+    .mem{fill:#333;font-size:11px;}
+    .line{stroke:#2c5a8c;stroke-width:1;}
+    .arrow{stroke:#2c5a8c;stroke-width:1.5;fill:none;}
+    .darrow{stroke:#2f8a4e;stroke-width:1.5;fill:none;stroke-dasharray:4 3;}
+    .lbl{fill:#6b7684;font-size:10px;font-style:italic;}
+  </style>
+  <defs>
+    <marker id="tri3" markerWidth="14" markerHeight="14" refX="12" refY="6" orient="auto">
+      <path d="M1,1 L13,6 L1,11 Z" fill="#fff" stroke="#2c5a8c" stroke-width="1.2"/>
+    </marker>
+    <marker id="open3" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto">
+      <path d="M1,1 L10,5 L1,9" fill="none" stroke="#2f8a4e" stroke-width="1.4"/>
+    </marker>
+  </defs>
+
+  <!-- ShapeFactory -->
+  <rect class="fbox" x="20" y="120" width="190" height="70" rx="3"/>
+  <text class="title" x="115" y="140" text-anchor="middle" fill="#1f6b3b">ShapeFactory</text>
+  <line x1="20" y1="148" x2="210" y2="148" stroke="#2f8a4e"/>
+  <text class="mem" x="28" y="166">+ create(type: string)</text>
+  <text class="mem" x="40" y="180">: unique_ptr&lt;Shape&gt;  «static»</text>
+
+  <!-- creates arrow -->
+  <path class="darrow" d="M210,150 L350,120" marker-end="url(#open3)"/>
+  <text class="lbl" x="250" y="125" fill="#2f8a4e">«creates»</text>
+
+  <!-- Shape abstract -->
+  <rect class="abox" x="350" y="95" width="160" height="56" rx="3"/>
+  <text class="title" x="430" y="115" text-anchor="middle" fill="#8a5411">«abstract» Shape</text>
+  <line x1="350" y1="123" x2="510" y2="123" stroke="#b5721a"/>
+  <text class="mem" x="358" y="140" font-style="italic">+ draw() = 0</text>
+
+  <!-- subclasses -->
+  <path class="arrow" d="M400,250 L420,151" marker-end="url(#tri3)"/>
+  <path class="arrow" d="M430,250 L430,151" marker-end="url(#tri3)"/>
+  <path class="arrow" d="M470,250 L440,151" marker-end="url(#tri3)"/>
+
+  <rect class="box" x="330" y="250" width="90" height="46" rx="3"/>
+  <text class="title" x="375" y="272" text-anchor="middle" font-size="12">Circle</text>
+  <text class="mem" x="375" y="288" text-anchor="middle">+ draw()</text>
+
+  <rect class="box" x="430" y="250" width="90" height="46" rx="3"/>
+  <text class="title" x="475" y="272" text-anchor="middle" font-size="12">Square</text>
+  <text class="mem" x="475" y="288" text-anchor="middle">+ draw()</text>
+
+  <rect class="box" x="400" y="250" width="0" height="0"/>
+  <rect class="box" x="300" y="250" width="0" height="0"/>
+  <rect class="box" x="230" y="250" width="90" height="46" rx="3"/>
+  <text class="title" x="275" y="272" text-anchor="middle" font-size="12">Triangle</text>
+  <text class="mem" x="275" y="288" text-anchor="middle">+ draw()</text>
+
+  <text class="lbl" x="115" y="225" text-anchor="middle">Caller asks for a type by name;</text>
+  <text class="lbl" x="115" y="240" text-anchor="middle">the factory returns the right object.</text>
+</svg>
