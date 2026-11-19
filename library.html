@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Library Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{
+  --bg:#f5f7f8; --surface:#ffffff; --surface-2:#eef1f4; --fg:#1b2430; --muted:#657083;
+  --border:#e2e7ee; --accent:#2f8f87; --accent-soft:#e4f3f1; --on-accent:#ffffff;
+  --ok:#2f8a55; --ok-soft:#e5f4ea; --warn:#b5781a; --warn-soft:#fbf0db; --danger:#c0433f; --danger-soft:#fbe8e7;
+  --shadow:0 1px 2px rgba(20,30,45,.05),0 8px 22px rgba(20,30,45,.07);
+  --font:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --display:"Space Grotesk","Inter",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f141a; --surface:#161d26; --surface-2:#1d2630; --fg:#e7edf3; --muted:#97a3b2;
+  --border:#283240; --accent:#4fc0b4; --accent-soft:#143029; --on-accent:#06201c;
+  --ok:#54c07c; --ok-soft:#133022; --warn:#e0ad55; --warn-soft:#312616; --danger:#e9736e; --danger-soft:#331b1b;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0f141a; --surface:#161d26; --surface-2:#1d2630; --fg:#e7edf3; --muted:#97a3b2;
+  --border:#283240; --accent:#4fc0b4; --accent-soft:#143029; --on-accent:#06201c;
+  --ok:#54c07c; --ok-soft:#133022; --warn:#e0ad55; --warn-soft:#312616; --danger:#e9736e; --danger-soft:#331b1b;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);line-height:1.55;-webkit-font-smoothing:antialiased;}
+img{max-width:100%;}
+.wrap{max-width:820px;margin:0 auto;padding:28px 16px 70px;}
+.top{display:flex;align-items:center;gap:13px;margin-bottom:6px;}
+.mark{width:42px;height:42px;border-radius:11px;flex:none;display:grid;place-items:center;color:var(--on-accent);
+  background:linear-gradient(135deg,var(--accent),#2b6f9c);font-size:22px;}
+h1{font-family:var(--display);font-size:24px;margin:0;letter-spacing:-.3px;}
+.sub{color:var(--muted);font-size:13px;}
+.theme{margin-left:auto;width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--surface);
+  color:var(--fg);cursor:pointer;font-size:15px;display:grid;place-items:center;}
+.theme:hover{border-color:var(--accent);}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 22px;}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow);}
+.stat .n{font-family:var(--display);font-size:22px;font-weight:700;line-height:1;}
+.stat .l{font-size:12px;color:var(--muted);margin-top:4px;}
+.stat.ok .n{color:var(--ok);} .stat.out .n{color:var(--warn);}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow);margin-bottom:18px;}
+.card h2{font-family:var(--display);font-size:15px;margin:0 0 12px;}
+.form{display:grid;grid-template-columns:110px 1fr 1fr auto;gap:10px;align-items:end;}
+.fld{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.fld label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+input,select{font-family:inherit;font-size:14px;color:var(--fg);background:var(--surface);border:1px solid var(--border);
+  border-radius:9px;padding:9px 11px;width:100%;}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent);}
+input::placeholder{color:var(--muted);opacity:.8;}
+.btn{font-family:inherit;font-size:14px;font-weight:600;border:1px solid transparent;border-radius:9px;padding:9px 16px;cursor:pointer;white-space:nowrap;}
+.btn.primary{background:var(--accent);color:var(--on-accent);}
+.btn.primary:hover{filter:brightness(1.06);}
+.btn.ghost{background:var(--surface);color:var(--fg);border-color:var(--border);}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent);}
+.btn.sm{padding:6px 13px;font-size:12.5px;border-radius:8px;}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
+.search{flex:1;min-width:180px;position:relative;}
+.search input{padding-left:34px;}
+.search .ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;}
+.controls select{width:auto;}
+.count{font-size:12.5px;color:var(--muted);margin:0 2px 12px;}
+.group{margin-bottom:22px;}
+.group-head{display:flex;align-items:baseline;gap:9px;margin:0 2px 9px;padding-bottom:6px;border-bottom:2px solid var(--accent-soft);}
+.group-head .gt{font-family:var(--display);font-size:15px;font-weight:700;color:var(--accent);}
+.group-head .gc{font-size:12px;color:var(--muted);}
+.list{display:flex;flex-direction:column;gap:9px;}
+.book{display:flex;align-items:center;gap:13px;background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:11px 14px;box-shadow:var(--shadow);}
+.id{font-family:var(--mono);font-size:12px;color:var(--muted);background:var(--surface-2);border-radius:7px;padding:4px 8px;flex:none;}
+.meta{min-width:0;flex:1;}
+.meta .t{font-weight:600;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;}
+.meta .a{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;}
+.pill{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;flex:none;}
+.pill.av{background:var(--ok-soft);color:var(--ok);}
+.pill.is{background:var(--warn-soft);color:var(--warn);}
+.book .act .btn.issue{background:var(--accent);color:var(--on-accent);}
+.book .act .btn.ret{background:var(--surface);color:var(--fg);border-color:var(--border);}
+.empty{text-align:center;color:var(--muted);padding:34px 10px;font-size:14px;}
+.foot{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;}
+.foot .note{font-size:12px;color:var(--muted);}
+#toasts{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;z-index:50;width:min(92vw,420px);}
+.toast{border-radius:10px;padding:11px 14px;font-size:13.5px;box-shadow:var(--shadow);border:1px solid var(--border);background:var(--surface);animation:rise .22s ease;}
+.toast.err{background:var(--danger-soft);border-color:var(--danger);color:var(--danger);}
+.toast.good{background:var(--ok-soft);border-color:var(--ok);color:var(--ok);}
+@keyframes rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+@media (prefers-reduced-motion:reduce){.toast{animation:none;}}
+@media (max-width:560px){
+  .form{grid-template-columns:1fr 1fr;}
+  .form .fld.full,.form .btn{grid-column:1 / -1;}
+  .stats{grid-template-columns:1fr;}
+  .stat{display:flex;align-items:baseline;gap:8px;}
+  .stat .l{margin-top:0;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="mark">&#128218;</div>
+    <div><h1>Library Manager</h1><div class="sub">Add, search, issue and return books &mdash; grouped by category</div></div>
+    <button class="theme" id="theme" type="button" aria-label="Toggle theme">&#9790;</button>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="n" id="s-total">0</div><div class="l">Total books</div></div>
+    <div class="stat ok"><div class="n" id="s-avail">0</div><div class="l">Available</div></div>
+    <div class="stat out"><div class="n" id="s-out">0</div><div class="l">Issued out</div></div>
+  </div>
+  <div class="card">
+    <h2>Add a book</h2>
+    <form class="form" id="addForm">
+      <div class="fld"><label for="f-id">ID</label><input id="f-id" inputmode="numeric" placeholder="e.g. 308"></div>
+      <div class="fld full"><label for="f-title">Title</label><input id="f-title" placeholder="Book title"></div>
+      <div class="fld full"><label for="f-author">Author</label><input id="f-author" placeholder="Author name"></div>
+      <button class="btn primary" type="submit">Add book</button>
+    </form>
+  </div>
+  <div class="controls">
+    <div class="search"><span class="ic">&#8981;</span>
+      <input id="search" placeholder="Search by ID, title or author" autocomplete="off"></div>
+    <select id="filter" aria-label="Filter by status">
+      <option value="all">All status</option><option value="avail">Available</option><option value="out">Issued</option>
+    </select>
+    <select id="cat" aria-label="Filter by category"><option value="">All categories</option></select>
+  </div>
+  <div class="count" id="count"></div>
+  <div id="groups"></div>
+  <div class="foot">
+    <span class="note">Changes are saved in this browser automatically.</span>
+    <button class="btn ghost sm" id="reset" type="button">Reset to sample catalogue</button>
+  </div>
+</div>
+<div id="toasts"></div>
+<script>
+(function(){
+  "use strict";
+  var KEY="lms-books-v2";
+  var SEED=[{"id": 101, "title": "Atomic Habits", "author": "James Clear", "available": true}, {"id": 102, "title": "The 7 Habits of Highly Effective People", "author": "Stephen Covey", "available": true}, {"id": 103, "title": "How to Win Friends and Influence People", "author": "Dale Carnegie", "available": false}, {"id": 104, "title": "Think and Grow Rich", "author": "Napoleon Hill", "available": true}, {"id": 105, "title": "The Power of Now", "author": "Eckhart Tolle", "available": true}, {"id": 106, "title": "Mindset", "author": "Carol Dweck", "available": true}, {"id": 107, "title": "Deep Work", "author": "Cal Newport", "available": true}, {"id": 108, "title": "The Subtle Art of Not Giving a Damn", "author": "Mark Manson", "available": true}, {"id": 109, "title": "Daring Greatly", "author": "Brene Brown", "available": true}, {"id": 110, "title": "Grit", "author": "Angela Duckworth", "available": true}, {"id": 111, "title": "The Four Agreements", "author": "Don Miguel Ruiz", "available": true}, {"id": 112, "title": "Awaken the Giant Within", "author": "Tony Robbins", "available": true}, {"id": 113, "title": "The Compound Effect", "author": "Darren Hardy", "available": true}, {"id": 114, "title": "Essentialism", "author": "Greg McKeown", "available": true}, {"id": 115, "title": "Cant Hurt Me", "author": "David Goggins", "available": true}, {"id": 201, "title": "Cosmos", "author": "Carl Sagan", "available": true}, {"id": 202, "title": "A Brief History of Time", "author": "Stephen Hawking", "available": true}, {"id": 203, "title": "Pale Blue Dot", "author": "Carl Sagan", "available": true}, {"id": 204, "title": "Astrophysics for People in a Hurry", "author": "Neil deGrasse Tyson", "available": true}, {"id": 205, "title": "The Universe in a Nutshell", "author": "Stephen Hawking", "available": true}, {"id": 206, "title": "Death by Black Hole", "author": "Neil deGrasse Tyson", "available": true}, {"id": 207, "title": "The Elegant Universe", "author": "Brian Greene", "available": false}, {"id": 208, "title": "Packing for Mars", "author": "Mary Roach", "available": true}, {"id": 209, "title": "Hidden Figures", "author": "Margot Lee Shetterly", "available": true}, {"id": 210, "title": "The Right Stuff", "author": "Tom Wolfe", "available": true}, {"id": 211, "title": "An Astronauts Guide to Life on Earth", "author": "Chris Hadfield", "available": true}, {"id": 212, "title": "Welcome to the Universe", "author": "Neil deGrasse Tyson", "available": true}, {"id": 213, "title": "Black Holes and Time Warps", "author": "Kip Thorne", "available": true}, {"id": 214, "title": "The Order of Time", "author": "Carlo Rovelli", "available": true}, {"id": 215, "title": "Origins", "author": "Neil deGrasse Tyson", "available": true}, {"id": 301, "title": "The Selfish Gene", "author": "Richard Dawkins", "available": true}, {"id": 302, "title": "On the Origin of Species", "author": "Charles Darwin", "available": true}, {"id": 303, "title": "The Gene", "author": "Siddhartha Mukherjee", "available": true}, {"id": 304, "title": "The Double Helix", "author": "James Watson", "available": true}, {"id": 305, "title": "Sapiens", "author": "Yuval Noah Harari", "available": false}, {"id": 306, "title": "The Immortal Life of Henrietta Lacks", "author": "Rebecca Skloot", "available": true}, {"id": 307, "title": "Why We Sleep", "author": "Matthew Walker", "available": true}, {"id": 308, "title": "The Blind Watchmaker", "author": "Richard Dawkins", "available": true}, {"id": 309, "title": "The Hidden Life of Trees", "author": "Peter Wohlleben", "available": true}, {"id": 310, "title": "Behave", "author": "Robert Sapolsky", "available": true}, {"id": 311, "title": "I Contain Multitudes", "author": "Ed Yong", "available": true}, {"id": 312, "title": "The Body", "author": "Bill Bryson", "available": true}, {"id": 313, "title": "Genome", "author": "Matt Ridley", "available": true}, {"id": 314, "title": "Lab Girl", "author": "Hope Jahren", "available": true}, {"id": 401, "title": "The Feynman Lectures on Physics", "author": "Richard Feynman", "available": false}, {"id": 402, "title": "Six Easy Pieces", "author": "Richard Feynman", "available": true}, {"id": 403, "title": "Surely Youre Joking Mr Feynman", "author": "Richard Feynman", "available": true}, {"id": 404, "title": "Relativity", "author": "Albert Einstein", "available": true}, {"id": 405, "title": "The Fabric of the Cosmos", "author": "Brian Greene", "available": true}, {"id": 406, "title": "Quantum", "author": "Manjit Kumar", "available": true}, {"id": 407, "title": "Seven Brief Lessons on Physics", "author": "Carlo Rovelli", "available": true}, {"id": 408, "title": "Reality Is Not What It Seems", "author": "Carlo Rovelli", "available": true}, {"id": 409, "title": "The Grand Design", "author": "Stephen Hawking", "available": true}, {"id": 410, "title": "Hyperspace", "author": "Michio Kaku", "available": true}, {"id": 411, "title": "Physics of the Impossible", "author": "Michio Kaku", "available": true}, {"id": 412, "title": "The Theoretical Minimum", "author": "Leonard Susskind", "available": true}, {"id": 413, "title": "QED", "author": "Richard Feynman", "available": true}, {"id": 414, "title": "Thirty Years that Shook Physics", "author": "George Gamow", "available": true}, {"id": 501, "title": "The Disappearing Spoon", "author": "Sam Kean", "available": true}, {"id": 502, "title": "Periodic Tales", "author": "Hugh Aldersey-Williams", "available": true}, {"id": 503, "title": "Napoleons Buttons", "author": "Penny Le Couteur", "available": true}, {"id": 504, "title": "Uncle Tungsten", "author": "Oliver Sacks", "available": true}, {"id": 505, "title": "Molecules", "author": "Theodore Gray", "available": true}, {"id": 506, "title": "The Elements", "author": "Theodore Gray", "available": true}, {"id": 507, "title": "Caesars Last Breath", "author": "Sam Kean", "available": true}, {"id": 508, "title": "Chemistry The Central Science", "author": "Theodore Brown", "available": true}, {"id": 509, "title": "Stuff Matters", "author": "Mark Miodownik", "available": true}, {"id": 510, "title": "The Poisoners Handbook", "author": "Deborah Blum", "available": true}, {"id": 511, "title": "Reactions", "author": "Theodore Gray", "available": true}, {"id": 512, "title": "Why Chemical Reactions Happen", "author": "James Keeler", "available": true}, {"id": 513, "title": "The Chemical History of a Candle", "author": "Michael Faraday", "available": true}, {"id": 514, "title": "Organic Chemistry", "author": "Jonathan Clayden", "available": true}, {"id": 601, "title": "Fermats Last Theorem", "author": "Simon Singh", "available": false}, {"id": 602, "title": "The Joy of x", "author": "Steven Strogatz", "available": true}, {"id": 603, "title": "How Not to Be Wrong", "author": "Jordan Ellenberg", "available": true}, {"id": 604, "title": "Godel Escher Bach", "author": "Douglas Hofstadter", "available": true}, {"id": 605, "title": "A Mathematicians Apology", "author": "G H Hardy", "available": true}, {"id": 606, "title": "The Man Who Knew Infinity", "author": "Robert Kanigel", "available": true}, {"id": 607, "title": "Prime Obsession", "author": "John Derbyshire", "available": true}, {"id": 608, "title": "Infinite Powers", "author": "Steven Strogatz", "available": true}, {"id": 609, "title": "The Music of the Primes", "author": "Marcus du Sautoy", "available": true}, {"id": 610, "title": "Zero The Biography of a Dangerous Idea", "author": "Charles Seife", "available": true}, {"id": 611, "title": "Things to Make and Do in the Fourth Dimension", "author": "Matt Parker", "available": true}, {"id": 612, "title": "Humble Pi", "author": "Matt Parker", "available": true}, {"id": 613, "title": "Flatland", "author": "Edwin Abbott", "available": true}, {"id": 614, "title": "Calculus Made Easy", "author": "Silvanus Thompson", "available": true}, {"id": 701, "title": "Thinking Fast and Slow", "author": "Daniel Kahneman", "available": true}, {"id": 702, "title": "Freakonomics", "author": "Steven Levitt", "available": true}, {"id": 703, "title": "Outliers", "author": "Malcolm Gladwell", "available": true}, {"id": 704, "title": "Guns Germs and Steel", "author": "Jared Diamond", "available": true}, {"id": 705, "title": "A Short History of Nearly Everything", "author": "Bill Bryson", "available": true}, {"id": 706, "title": "The Code Book", "author": "Simon Singh", "available": true}, {"id": 707, "title": "Clean Code", "author": "Robert C Martin", "available": false}, {"id": 708, "title": "The Pragmatic Programmer", "author": "Andrew Hunt", "available": true}, {"id": 709, "title": "Introduction to Algorithms", "author": "Thomas Cormen", "available": true}, {"id": 710, "title": "The C Programming Language", "author": "Brian Kernighan", "available": true}, {"id": 711, "title": "The Art of War", "author": "Sun Tzu", "available": true}, {"id": 712, "title": "Meditations", "author": "Marcus Aurelius", "available": true}, {"id": 713, "title": "Zero to One", "author": "Peter Thiel", "available": true}, {"id": 714, "title": "The Lean Startup", "author": "Eric Ries", "available": true}];
+  // ID range -> category (same mapping as the C++ project)
+  var CATS=[
+    {name:"Self-Help",   lo:101, hi:199},
+    {name:"Space",       lo:201, hi:299},
+    {name:"Biology",     lo:301, hi:399},
+    {name:"Physics",     lo:401, hi:499},
+    {name:"Chemistry",   lo:501, hi:599},
+    {name:"Mathematics", lo:601, hi:699},
+    {name:"Other",       lo:701, hi:799}
+  ];
+  function catOf(id){
+    for(var i=0;i<CATS.length;i++){ if(id>=CATS[i].lo&&id<=CATS[i].hi) return CATS[i].name; }
+    return "Uncategorized";
+  }
+  var ORDER=CATS.map(function(c){return c.name;}).concat(["Uncategorized"]);
+
+  var books=load(), q="", status="all", cat="";
+  var $=function(id){return document.getElementById(id);};
+
+  function load(){
+    try{var r=localStorage.getItem(KEY); if(r){var a=JSON.parse(r); if(Array.isArray(a)) return a;}}catch(e){}
+    return SEED.map(function(b){return Object.assign({},b);});
+  }
+  function save(){ try{localStorage.setItem(KEY,JSON.stringify(books));}catch(e){} }
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+  function toast(msg,kind){
+    var t=document.createElement("div"); t.className="toast"+(kind?" "+kind:""); t.textContent=msg;
+    $("toasts").appendChild(t);
+    setTimeout(function(){t.style.opacity="0";t.style.transition="opacity .3s";
+      setTimeout(function(){t.remove();},320);},2600);
+  }
+  function matches(b){
+    if(status==="avail"&&!b.available) return false;
+    if(status==="out"&&b.available) return false;
+    if(cat&&catOf(b.id)!==cat) return false;
+    if(!q) return true;
+    var s=q.toLowerCase();
+    return String(b.id).indexOf(s)>-1||b.title.toLowerCase().indexOf(s)>-1||b.author.toLowerCase().indexOf(s)>-1;
+  }
+  function fillCats(){
+    var sel=$("cat"); var have={};
+    books.forEach(function(b){have[catOf(b.id)]=true;});
+    ORDER.forEach(function(name){ if(have[name]){
+      var o=document.createElement("option"); o.value=name; o.textContent=name; sel.appendChild(o); } });
+  }
+  function render(){
+    var total=books.length, avail=books.filter(function(b){return b.available;}).length;
+    $("s-total").textContent=total; $("s-avail").textContent=avail; $("s-out").textContent=total-avail;
+
+    var shown=books.filter(matches).sort(function(a,b){return a.id-b.id;});
+    var host=$("groups"); host.innerHTML="";
+    if(!books.length){ host.innerHTML='<div class="empty">The library is empty. Add your first book above.</div>'; $("count").textContent=""; return; }
+    if(!shown.length){ host.innerHTML='<div class="empty">No books match your search.</div>'; $("count").textContent="0 of "+total+" books"; return; }
+    $("count").textContent="Showing "+shown.length+" of "+total+" books";
+
+    var byCat={};
+    shown.forEach(function(b){ var c=catOf(b.id); (byCat[c]=byCat[c]||[]).push(b); });
+    ORDER.forEach(function(name){
+      var arr=byCat[name]; if(!arr||!arr.length) return;
+      var g=document.createElement("div"); g.className="group";
+      var avl=arr.filter(function(b){return b.available;}).length;
+      var head='<div class="group-head"><span class="gt">'+esc(name)+'</span>'+
+               '<span class="gc">'+arr.length+' book'+(arr.length!==1?"s":"")+' &middot; '+avl+' available</span></div>';
+      var rows='<div class="list">'+arr.map(function(b){
+        return '<div class="book"><span class="id">#'+b.id+'</span>'+
+          '<div class="meta"><div class="t">'+esc(b.title)+'</div><div class="a">'+esc(b.author||"Unknown author")+'</div></div>'+
+          '<span class="pill '+(b.available?"av":"is")+'">'+(b.available?"Available":"Issued")+'</span>'+
+          '<span class="act"><button class="btn sm '+(b.available?"issue":"ret")+'" data-id="'+b.id+
+            '" data-op="'+(b.available?"issue":"return")+'">'+(b.available?"Issue":"Return")+'</button></span></div>';
+      }).join("")+'</div>';
+      g.innerHTML=head+rows; host.appendChild(g);
+    });
+  }
+
+  $("addForm").addEventListener("submit",function(e){
+    e.preventDefault();
+    var idRaw=$("f-id").value.trim(), title=$("f-title").value.trim(), author=$("f-author").value.trim();
+    var id=parseInt(idRaw,10);
+    if(!idRaw||isNaN(id)||id<=0){ toast("Book ID must be a positive number.","err"); return; }
+    if(!title){ toast("Book title cannot be empty.","err"); return; }
+    if(books.some(function(b){return b.id===id;})){ toast("A book with ID "+id+" already exists.","err"); return; }
+    books.push({id:id,title:title,author:author||"Unknown author",available:true});
+    save(); refreshCats(); render();
+    toast('Added "'+title+'" to '+catOf(id)+'.',"good");
+    e.target.reset(); $("f-id").focus();
+  });
+  $("groups").addEventListener("click",function(e){
+    var btn=e.target.closest("button[data-op]"); if(!btn) return;
+    var id=parseInt(btn.getAttribute("data-id"),10), op=btn.getAttribute("data-op");
+    var b=books.filter(function(x){return x.id===id;})[0];
+    if(!b){ toast("No book found with ID "+id+".","err"); return; }
+    if(op==="issue"){
+      if(!b.available){ toast('"'+b.title+'" is already issued out.',"err"); return; }
+      b.available=false; save(); render(); toast('Issued "'+b.title+'". Enjoy!',"good");
+    }else{
+      if(b.available){ toast('"'+b.title+'" was not issued.',"err"); return; }
+      b.available=true; save(); render(); toast('Returned "'+b.title+'". Thank you!',"good");
+    }
+  });
+  $("search").addEventListener("input",function(e){ q=e.target.value.trim(); render(); });
+  $("filter").addEventListener("change",function(e){ status=e.target.value; render(); });
+  $("cat").addEventListener("change",function(e){ cat=e.target.value; render(); });
+  $("reset").addEventListener("click",function(){
+    books=SEED.map(function(b){return Object.assign({},b);});
+    save(); refreshCats(); render(); toast("Reset to the sample catalogue.","good");
+  });
+  function refreshCats(){ var sel=$("cat"); sel.innerHTML='<option value="">All categories</option>'; cat=""; fillCats(); }
+
+  // theme
+  var root=document.documentElement, TKEY="lms-theme";
+  function curTheme(){var a=root.getAttribute("data-theme"); if(a) return a;
+    return (window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)?"dark":"light";}
+  try{var st=localStorage.getItem(TKEY); if(st) root.setAttribute("data-theme",st);}catch(e){}
+  var tb=$("theme");
+  function tIcon(){tb.innerHTML=curTheme()==="dark"?"&#9728;":"&#9790;";}
+  tIcon();
+  tb.addEventListener("click",function(){var n=curTheme()==="dark"?"light":"dark";
+    root.setAttribute("data-theme",n); try{localStorage.setItem(TKEY,n);}catch(e){} tIcon();});
+
+  fillCats(); render();
+})();
+</script>
+</body>
+</html>

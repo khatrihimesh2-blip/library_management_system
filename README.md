@@ -10,6 +10,37 @@ Manual. The repository also contains solutions to **Practicals 01–11**.
 
 ---
 
+## 🌐 Web version — open it in your browser
+
+Prefer a visual, click-to-use version? [`library.html`](library.html) is a
+**standalone web app** of the same system — it needs **no compiler and no
+server**. It loads all **100 books grouped by category** and lets you add,
+search, filter, issue and return books, saving your changes automatically in the
+browser.
+
+![Library Manager web app](screenshots/library-web.png)
+
+**How to open it**
+
+- **Easiest:** double-click `library.html` in your file manager — it opens in
+  your default browser.
+- **Or** from a terminal in the project folder:
+
+  | OS | Command |
+  |----|---------|
+  | macOS | `open library.html` |
+  | Windows | `start library.html` |
+  | Linux | `xdg-open library.html` |
+
+Everything runs locally in the page; the sample catalogue mirrors the C++
+program's `catalog.csv`, grouped by the same ID ranges (Self-Help, Space,
+Biology, Physics, Chemistry, Mathematics, Other).
+
+> The console C++ program below is the actual **mini-project submission**; the
+> web page is an extra, friendlier way to try the same features.
+
+---
+
 ## 1. What this project does
 
 The application lets a librarian manage a catalogue of **100 sample books**
@@ -209,6 +240,10 @@ library_management_system/
 ├── main.cpp                     # Console menu driver
 ├── catalog.csv                  # 100 sample books
 ├── Makefile                     # Build rules
+├── library.html                 # Web version (open in a browser)
+├── CPP_Practical_Manual.pdf     # Full practical manual (all 12 practicals)
+├── diagrams/                    # SVG diagrams used in the manual
+├── screenshots/                 # README images
 ├── UML.md                       # UML class diagram
 ├── README.md                    # This file
 └── practicals/                  # Practicals 01–11 (see practicals/README.md)
